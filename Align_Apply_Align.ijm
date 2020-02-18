@@ -8,9 +8,9 @@
  */ 
 
 //Within the quotes, type in your selected path, target directory, and selected channel ('ER210' or 'RGECO')
-source_path = "C:/Users/vmac1/Desktop/Mi1_grating_responses/fly4/Image0003.oib"
-target_directory = "C:/Users/vmac1/Desktop/ER/screen/Mi1/grating/191031_fly4_0003_example"
-source_channel = "ER210" 
+source_path = "C:/Users/vmac1/Desktop/200206-Mi1-RGECO+ER210/grating_img/Job1_017.tif"
+target_directory = "C:/Users/vmac1/Desktop/ER/screen/Mi1/gratings/fly1/02072020_fly1_0017/"
+source_channel = "RGECO" 
 //press Ctrl+R
 
 Align_Apply_Align(source_path, target_directory, source_channel);
@@ -44,12 +44,12 @@ function Align_Apply_Align(source_image, target_dir, Channel_A) {
 	setSlice(1); 
 	run("Duplicate...", "title=currentFrame");
 	run("TurboReg ","-align " 
-		 + "-window currentFrame 0 0 255 255 "
-		 + "-window AVG_"+Channel_A+"_Raw 0 0 255 255 "
+		 + "-window currentFrame 0 0 199 79 "
+		 + "-window AVG_"+Channel_A+"_Raw 0 0 199 79 "
 		 + "-rigidBody "
-		 + "128 128 128 128 " //1st landmarks of source & target (gives overall translation)
-		 + "128 40 128 40 " //2nd landmarks of source & target (determines rotation angle)
-		 + "128 216 128 216 " //3rd landmarks of source & target (determines rotation angle)
+		 + "100 40 100 40 " //1st landmarks of source & target (gives overall translation)
+		 + "100 13 100 13 " //2nd landmarks of source & target (determines rotation angle)
+		 + "100 67 100 67 " //3rd landmarks of source & target (determines rotation angle)
 		 + "-showOutput"); //"showOutput" in TurboReg triggers "Refined Landmarks" and "Log" windows
 	selectWindow("Output"); //output = 2 sequential images for each frame in 'Channel_A': (1) raw data; (2) mask/black background
 	setSlice(2); 
@@ -91,12 +91,12 @@ function Align_Apply_Align(source_image, target_dir, Channel_A) {
 		setSlice(i);
 		run("Duplicate...", "title=currentFrame"); 
 		run("TurboReg ","-align " 
-			 + "-window currentFrame 0 0 255 255 "
-			 + "-window AVG_"+Channel_A+"_Raw 0 0 255 255 "
+			 + "-window currentFrame 0 0 199 79 "
+			 + "-window AVG_"+Channel_A+"_Raw 0 0 199 79 "
 			 + "-rigidBody "
-			 + "128 128 128 128 "
-			 + "128 40 128 40 "
-			 + "128 216 128 216 "
+			 + "100 40 100 40 "
+			 + "100 13 100 13 "
+			 + "100 67 100 67 "
 			 + "-showOutput"); 	//"showOutput" in TurboReg triggers "Refined Landmarks" and "Log" windows, so please ignore	
 		selectWindow("Output"); //output = 2 sequential images for each frame in 'Channel_A': (1) raw data; (2) mask/black background
 		setSlice(2); 
