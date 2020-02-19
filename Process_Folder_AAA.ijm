@@ -4,11 +4,11 @@
 
 //~USER INPUT~
 //input_dir must be a directory containing images of either flash responses or grating responses
-input_dir = "C:/Users/vmac1/Desktop/Mi1_grating_responses/"; 
+input_dir = "C:/Users/vmac1/Desktop/fly1_images/gratings/"; 
 //output_dir must be a 'grating' or 'flashes' folder 
-output_dir = "C:/Users/vmac1/Desktop/ER/screen/Mi1/example_grating/" 
+output_dir = "C:/Users/vmac1/Desktop/fly1_gratings/" 
 //target_channel must be either 'ER210' or 'RGECO'
-target_channel = "ER210"
+target_channel = "RGECO"
 //press Ctrl+R to run the entire code 
 
 //set global variable (counter) to 0 outside of macro; this is target_list's counter for processFolder macro
@@ -23,12 +23,12 @@ function processFolder(input, output, channel) {
 	source_list = Array.sort(source_list);
 	target_list = getFileList(output);
 	target_list = Array.sort(target_list);
-	//run the AAA code for ea/ .oib file in your input directory 
+	//run the AAA code for ea/ .tif file in your input directory 
 	for (i = 0; i < source_list.length; i++) {
 	    if (endsWith(source_list[i], "/")){
 	    	processFolder(""+input+source_list[i], output, channel);
 	    }
-	    else if (endsWith(source_list[i], ".oib")){
+	    else if (endsWith(source_list[i], ".tif")){
 	    	print((counter+1) + ") " + source_list[i]); 
 	    	print("Processing: " + input+source_list[i]);
 	    	print("Saving to: " + output+target_list[counter]);
@@ -207,10 +207,15 @@ function Align_Apply_Align(source_image, target_dir, Channel_A) {
 			run("Duplicate...","title="+Channel_A+"-00"+(i-1));
 			saveAs("Tiff", target_dir+File.separator+Channel_A+File.separator+Channel_A+"-00"+(i-1)+".tif");
 		}
-		//Saving images 0100 to 0599
-		else if (i>100){
+		//Saving images 0100 to 0999
+		else if (i>100 && i<=1000){
 			run("Duplicate...","title="+Channel_A+"-0"+(i-1));
 			saveAs("Tiff", target_dir+File.separator+Channel_A+File.separator+Channel_A+"-0"+(i-1)+".tif");
+		}
+		//Saving images 1000 to 9999
+		else if (i>1000){
+			run("Duplicate...","title="+Channel_A+"-0"+(i-1));
+			saveAs("Tiff", target_dir+File.separator+Channel_A+File.separator+Channel_A+"-"+(i-1)+".tif");
 		}
 		close();
 		selectWindow(Channel_A+"_Aligned");
@@ -236,10 +241,15 @@ function Align_Apply_Align(source_image, target_dir, Channel_A) {
 			run("Duplicate...","title="+Channel_B+"-00"+(i-1));
 			saveAs("Tiff", target_dir+File.separator+Channel_B+File.separator+Channel_B+"-00"+(i-1)+".tif");
 		}
-		//Saving images 0100 to 0599
-		else if (i>100){
+		//Saving images 0100 to 0999
+		else if (i>100 && i<=1000){
 			run("Duplicate...","title="+Channel_B+"-0"+(i-1));
 			saveAs("Tiff", target_dir+File.separator+Channel_B+File.separator+Channel_B+"-0"+(i-1)+".tif");
+		}
+		//Saving images 1000 to 9999
+		else if (i>1000){
+			run("Duplicate...","title="+Channel_B+(i-1));
+			saveAs("Tiff", target_dir+File.separator+Channel_B+File.separator+Channel_B+"-"+(i-1)+".tif");
 		}
 		close();
 		selectWindow(Channel_B+"_Aligned");
@@ -247,7 +257,11 @@ function Align_Apply_Align(source_image, target_dir, Channel_A) {
 	//exit batch mode
 	setBatchMode(false);
 
-//(Section 6) SAVE AVERAGE PROJECTION OF TWO ALIGNED CHANNELS
+//(Section 6) MAKE DIRECTORES FOR PLOTS & MEASUREMENTS
+	File.makeDirectory(target_dir+File.separator+"plots");
+	File.makeDirectory(target_dir+File.separator+"measurements");
+
+//(Section 7) SAVE AVERAGE PROJECTION OF TWO ALIGNED CHANNELS
 	//concatenate the two aligned 8-bit videos, output will be 'Untitled' window
 	run("Concatenate...", "  image1='"+Channel_A+"_Aligned' " 
 		+ "image2='"+Channel_B+"_Aligned'"); 
