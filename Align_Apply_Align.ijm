@@ -193,13 +193,13 @@ function Align_Apply_Align(source_image, target_dir, Channel_A) {
 			run("Duplicate...","title="+Channel_A+"-0"+(i-1));
 			saveAs("Tiff", target_dir+File.separator+Channel_A+File.separator+Channel_A+"-0"+(i-1)+".tif");
 		}
-		close();
-		selectWindow(Channel_A+"_Aligned");
 		//Saving images 1000 to 9999
 		else if (i>1000){
 			run("Duplicate...","title="+Channel_A+(i-1));
 			saveAs("Tiff", target_dir+File.separator+Channel_A+File.separator+Channel_A+"-"+(i-1)+".tif");
 		}
+		close();
+		selectWindow(Channel_A+"_Aligned");
 	}
 	//exit batch mode
 	setBatchMode(false); 	
@@ -228,6 +228,7 @@ function Align_Apply_Align(source_image, target_dir, Channel_A) {
 		else if (i>100 && i<=1000){
 			run("Duplicate...","title="+Channel_B+"-0"+(i-1));
 			saveAs("Tiff", target_dir+File.separator+Channel_B+File.separator+Channel_B+"-0"+(i-1)+".tif");
+		}
 		//Saving images 1000 to 9999
 		else if (i>1000){
 			run("Duplicate...","title="+Channel_B+(i-1));
