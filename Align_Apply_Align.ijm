@@ -43,13 +43,15 @@ function Align_Apply_Align(source_image, target_dir, Channel_A) {
 	selectWindow(Channel_A+"_Raw");
 	setSlice(1); 
 	run("Duplicate...", "title=currentFrame");
+	width = getWidth();
+	height = getHeight();
 	run("TurboReg ","-align " 
-		 + "-window currentFrame 0 0 199 79 "
-		 + "-window AVG_"+Channel_A+"_Raw 0 0 199 79 "
+		 + "-window currentFrame 0 0 "+(width-1)+" "+(height-1)+" "
+		 + "-window AVG_"+Channel_A+"_Raw 0 0 "+(width-1)+ " "+(height-1)+" "
 		 + "-rigidBody "
-		 + "100 40 100 40 " //1st landmarks of source & target (gives overall translation)
-		 + "100 13 100 13 " //2nd landmarks of source & target (determines rotation angle)
-		 + "100 67 100 67 " //3rd landmarks of source & target (determines rotation angle)
+		 + (width/2)+" "+(height/2)+" "+(width/2)+" "+(height/2)+" "//1st landmarks of source & target (gives overall translation)
+		 + (width/2)+" "+round(0.15625*height)+" "+(width/2)+" "+round(0.15625*height)+" "//2nd landmarks of source & target (determines rotation angle)
+		 + (width/2)+" "+round(0.84375*height)+" "+(width/2)+" "+round(0.84375*height)+" "//3rd landmarks of source & target (determines rotation angle)
 		 + "-showOutput"); //"showOutput" in TurboReg triggers "Refined Landmarks" and "Log" windows
 	selectWindow("Output"); //output = 2 sequential images for each frame in 'Channel_A': (1) raw data; (2) mask/black background
 	setSlice(2); 
@@ -90,14 +92,16 @@ function Align_Apply_Align(source_image, target_dir, Channel_A) {
 	for (i=2; i<=nSlices; i++) { //nSlices = total number of frames in selected Window
 		setSlice(i);
 		run("Duplicate...", "title=currentFrame"); 
+		width = getWidth();
+		height = getHeight();
 		run("TurboReg ","-align " 
-			 + "-window currentFrame 0 0 199 79 "
-			 + "-window AVG_"+Channel_A+"_Raw 0 0 199 79 "
+			 + "-window currentFrame 0 0 "+(width-1)+" "+(height-1)+" "
+			 + "-window AVG_"+Channel_A+"_Raw 0 0 "+(width-1)+ " "+(height-1)+" "
 			 + "-rigidBody "
-			 + "100 40 100 40 "
-			 + "100 13 100 13 "
-			 + "100 67 100 67 "
-			 + "-showOutput"); 	//"showOutput" in TurboReg triggers "Refined Landmarks" and "Log" windows, so please ignore	
+			 + (width/2)+" "+(height/2)+" "+(width/2)+" "+(height/2)+" "//1st landmarks of source & target (gives overall translation)
+			 + (width/2)+" "+round(0.15625*height)+" "+(width/2)+" "+round(0.15625*height)+" "//2nd landmarks of source & target (determines rotation angle)
+			 + (width/2)+" "+round(0.84375*height)+" "+(width/2)+" "+round(0.84375*height)+" "//3rd landmarks of source & target (determines rotation angle)
+			 + "-showOutput"); //"showOutput" in TurboReg triggers "Refined Landmarks" and "Log" windows
 		selectWindow("Output"); //output = 2 sequential images for each frame in 'Channel_A': (1) raw data; (2) mask/black background
 		setSlice(2); 
 		run("Delete Slice"); //delete mask/black background frame, which is the 2nd frame of the output window
